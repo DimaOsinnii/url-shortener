@@ -1,0 +1,35 @@
+.DS_Store
+node_modules
+/build
+/.svelte-kit
+/package
+.env
+.env.*
+!.env.example
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# Ignore temporary files
+*.log
+*.tmp
+*.cache
+*.lock
+
+# Ignore IDE/editor specific files
+.vscode/
+.idea/
+.DS_Store
+
+# Ignore local environment files
+.env
+.env.local
+.env.*.local
+
+# Ignore Cloudflare credentials and local KV storage
+.cloudflare/
+wranglerjs/
+kv-data/
+
+# Ignore build output
+build/
+dist/
