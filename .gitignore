@@ -33,3 +33,7 @@ kv-data/
 # Ignore build output
 build/
 dist/
+
+# wrangler files
+.wrangler
+.dev.vars
