@@ -1,17 +1,18 @@
 import { createHistoryService } from '../../../services/history';
 
-export async function load({ params, platform, url }) {
+export async function load({ params, platform, url, setHeaders }) {
 	const { getAllHistory } = createHistoryService(platform);
 
 	const { shortUrl } = params;
 
-	const history = await getAllHistory(shortUrl);
+	const list = await getAllHistory(shortUrl);
+
+	setHeaders({
+		'cache-control': 'no-store'
+	});
 
 	return {
-		list: history.map(({ timestamp, ...rest }) => ({
-			timestamp: new Date(timestamp).toLocaleString(),
-			...rest
-		})),
+		list,
 		shortUrl: `${url.origin}/${shortUrl}`
 	};
 }

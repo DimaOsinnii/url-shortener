@@ -32,7 +32,7 @@
 						<td>{row.userAgent}</td>
 						<td>{row.ip ?? '-'}</td>
 						<td>{row.geo ?? '-'}</td>
-						<td>{row.timestamp}</td>
+						<td>{row.timestamp.toLocaleString()}</td>
 					</tr>
 				{/each}
 			</tbody>

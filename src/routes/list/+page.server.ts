@@ -1,15 +1,18 @@
 import { createLinkService } from '../../services/links';
 
-export async function load({ platform, url }) {
+export async function load({ platform, url, setHeaders }) {
 	const { getLinkLists } = createLinkService(platform);
 
 	const linkList = await getLinkLists();
 
+	setHeaders({
+		'cache-control': 'no-store'
+	});
+
 	return {
 		list: linkList.map((link) => ({
-			url: link.url,
-			shortUrl: `${url.origin}/${link.shortUrl}`,
-			createdAt: link.createdAt.toLocaleString()
+			...link,
+			shortUrl: `${url.origin}/${link.shortUrl}`
 		}))
 	};
 }

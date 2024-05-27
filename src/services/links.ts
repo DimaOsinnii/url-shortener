@@ -50,14 +50,14 @@ export function createLinkService(platform?: App.Platform) {
 		async function getListRecur(cursor?: string) {
 			const result = await store.list<LinkMetadata>({ cursor });
 
-			const data = result.keys
-				.map(({ metadata }) => metadata)
-				.filter((metadata): metadata is LinkMetadata => metadata !== undefined);
+			result.keys.forEach(({ metadata, name }) => {
+				if (!metadata) return;
 
-			data.forEach(({ createdAt, url }, idx) => {
+				const { createdAt, url } = metadata;
+
 				linkList.push({
 					url,
-					shortUrl: result.keys[idx].name,
+					shortUrl: name,
 					createdAt: new Date(createdAt)
 				});
 			});

@@ -29,7 +29,7 @@
 					<tr>
 						<td><a href={row.shortUrl}>{row.shortUrl}</a></td>
 						<td><a href={row.url}>{row.url}</a></td>
-						<td>{row.createdAt}</td>
+						<td>{row.createdAt.toLocaleString()}</td>
 					</tr>
 				{/each}
 			</tbody>

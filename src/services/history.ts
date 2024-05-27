@@ -20,18 +20,18 @@ export function createHistoryService(platform?: App.Platform) {
 
 	// As we need to get total clicks we should get all history at once,
 	// but we  could optimise this by creating another KV(COUNTER) and use DurableObject to safely
-	// mutate COUNTER
+	// mutate COUNTER (DurableObjects included in paid plan)
 	async function getAllHistory(prefix: string) {
 		const history: Array<History> = [];
 
 		async function getListRecur(cursor?: string) {
 			const result = await store.list<HistoryMetadata>({ cursor, prefix });
 
-			const data = result.keys
-				.map(({ metadata }) => metadata)
-				.filter((metadata): metadata is HistoryMetadata => metadata !== undefined);
+			result.keys.forEach(({ metadata }) => {
+				if (!metadata) return;
 
-			data.forEach(({ timestamp, ...rest }) => {
+				const { timestamp, ...rest } = metadata;
+
 				history.push({
 					...rest,
 					timestamp: new Date(timestamp)
