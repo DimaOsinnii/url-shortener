@@ -19,7 +19,7 @@
 		</ul>
 	</nav>
 </header>
-<main class="container"><slot /></main>
+<main class="container"><slot></slot></main>
 <footer></footer>
 
 <style>
