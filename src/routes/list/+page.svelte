@@ -16,24 +16,27 @@
 	{#if !data.list.length}
 		<p class="empty">There are no urls yet</p>
 	{:else}
-		<table class="striped">
-			<thead data-theme="light">
-				<tr>
-					<th>Short url</th>
-					<th>Long url</th>
-					<th>Created at</th>
-				</tr>
-			</thead>
-			<tbody>
-				{#each tableRows as row (row.shortUrl)}
+		<div class="table-container">
+			<table class="striped">
+				<thead data-theme="light">
 					<tr>
-						<td><a href={row.shortUrl}>{row.shortUrl}</a></td>
-						<td><a href={row.url}>{row.url}</a></td>
-						<td>{row.createdAt.toLocaleString()}</td>
+						<th>Short url</th>
+						<th>Long url</th>
+						<th>Created at</th>
 					</tr>
-				{/each}
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					{#each tableRows as row (row.shortUrl)}
+						<tr>
+							<td><a href={row.shortUrl}>{row.shortUrl}</a></td>
+							<td><a href={row.url}>{row.url}</a></td>
+							<td>{row.createdAt.toLocaleString()}</td>
+						</tr>
+					{/each}
+				</tbody>
+			</table>
+		</div>
+
 		{#if total > 100 && tableRows.length !== total}
 			<button on:click={() => (tableRows = data.list)}>Show all</button>
 		{/if}
@@ -41,7 +44,7 @@
 </section>
 
 <style>
-	section {
+	.table-container {
 		overflow-x: auto;
 	}
 
