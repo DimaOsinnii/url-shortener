@@ -7,3 +7,6 @@ kv_namespaces = [
     { binding = "LINKS", id = "$LINKS_KV_NAMESPACE_ID" },
     { binding = "HISTORY", id = "$HISTORY_KV_NAMESPACE_ID" },
 ]
+
+[vars]
+NODE_VERSION = "18.19.0"
