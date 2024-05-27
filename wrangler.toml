@@ -4,8 +4,8 @@ pages_build_output_dir = ".svelte-kit/cloudflare"
 
 
 kv_namespaces = [
-    { binding = "LINKS", id = "$LINKS_KV_NAMESPACE_ID" },
-    { binding = "HISTORY", id = "$HISTORY_KV_NAMESPACE_ID" },
+    { binding = "LINKS", id = "b09a28dafdbc492d9e67eb60526b511c" },
+    { binding = "HISTORY", id = "c533bcff20684107a665aa133131e11b" },
 ]
 
 [vars]
