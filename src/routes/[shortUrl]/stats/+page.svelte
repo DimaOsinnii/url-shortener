@@ -1,10 +1,13 @@
 <script lang="ts">
 	import type { PageServerData } from './$types';
-	import { afterNavigate, invalidateAll } from '$app/navigation';
+	import { invalidateAll } from '$app/navigation';
+	import { onMount } from 'svelte';
 
 	export let data: PageServerData;
 
-	afterNavigate(() => invalidateAll());
+	onMount(() => {
+		invalidateAll();
+	});
 
 	$: tableRows = data.list.slice(0, 100);
 
