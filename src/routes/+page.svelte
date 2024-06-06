@@ -6,7 +6,6 @@
 	import { fade } from 'svelte/transition';
 
 	import { enhance } from '$app/forms';
-	import { invalidateAll } from '$app/navigation';
 
 	export let form: ActionData;
 
@@ -17,7 +16,6 @@
 		return async ({ update }) => {
 			loading = false;
 			await update();
-			await invalidateAll();
 		};
 	};
 

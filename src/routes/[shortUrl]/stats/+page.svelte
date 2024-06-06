@@ -1,7 +1,10 @@
 <script lang="ts">
 	import type { PageServerData } from './$types';
+	import { afterNavigate, invalidateAll } from '$app/navigation';
 
 	export let data: PageServerData;
+
+	afterNavigate(() => invalidateAll());
 
 	$: tableRows = data.list.slice(0, 100);
 
