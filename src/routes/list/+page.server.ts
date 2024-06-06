@@ -1,13 +1,9 @@
-import { createLinkService } from '../../services/links';
+import { createLinkService } from '$lib/services/links';
 
-export async function load({ platform, url, setHeaders }) {
+export async function load({ platform, url }) {
 	const { getLinkLists } = createLinkService(platform);
 
 	const linkList = await getLinkLists();
-
-	setHeaders({
-		'cache-control': 'no-store'
-	});
 
 	return {
 		list: linkList.map((link) => ({

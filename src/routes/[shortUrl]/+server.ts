@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
-import { createHistoryService } from '../../services/history';
-import { createLinkService } from '../../services/links';
+import { createHistoryService } from '$lib/services/history';
+import { createLinkService } from '$lib/services/links';
 
 export async function GET({ params, platform, request }) {
 	const { shortUrl } = params;

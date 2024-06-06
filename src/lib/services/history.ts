@@ -1,5 +1,3 @@
-import { KV_NAMESPACE } from '../constants';
-
 interface History {
 	userAgent: string | null;
 	ip: string | null;
@@ -16,7 +14,7 @@ export function createHistoryService(platform?: App.Platform) {
 		throw new Error('Platform is not specified!');
 	}
 
-	const store = platform.env[KV_NAMESPACE.HISTORY];
+	const store = platform.env.HISTORY;
 
 	// As we need to get total clicks we should get all history at once,
 	// but we  could optimise this by creating another KV(COUNTER) and use DurableObject to safely

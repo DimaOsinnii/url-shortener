@@ -1,15 +1,11 @@
-import { createHistoryService } from '../../../services/history';
+import { createHistoryService } from '$lib/services/history';
 
-export async function load({ params, platform, url, setHeaders }) {
+export async function load({ params, platform, url }) {
 	const { getAllHistory } = createHistoryService(platform);
 
 	const { shortUrl } = params;
 
 	const list = await getAllHistory(shortUrl);
-
-	setHeaders({
-		'cache-control': 'no-store'
-	});
 
 	return {
 		list,

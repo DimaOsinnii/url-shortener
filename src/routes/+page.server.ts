@@ -1,43 +1,40 @@
 import type { Actions } from './$types';
+import type { FieldNames } from '$lib/types';
 
 import { fail } from '@sveltejs/kit';
 
-import { createLinkService } from '../services/links';
+import { CreateUrlError } from '$lib/errors';
+import { createLinkService } from '$lib/services/links';
+import { validateCreateUrlFormData } from '$lib/validation';
 
-import { InvalidShortUrlError, InvalidUrlError, ShortUrlExistsError } from '$lib/errors';
-
-import { FIELD_NAMES } from '../constants';
+type ActionData = {
+	data: Record<string, FormDataEntryValue>;
+	errors: Partial<Record<FieldNames | 'general', string>>;
+};
 
 export const actions = {
 	default: async ({ request, platform }) => {
+		const { createLink } = createLinkService(platform);
+
 		const formData = await request.formData();
 		const origin = new URL(request.url).origin;
 
-		const url = String(formData.get(FIELD_NAMES.URL));
-		const shortUrl = String(formData.get(FIELD_NAMES.SHORT_URL));
-
-		const { createLink } = createLinkService(platform);
-
-		const errors: Record<string, string> = {};
-
 		try {
-			await createLink(shortUrl, url);
-		} catch (error) {
-			//TODO: better to use validation libraries like zod
-			if (error instanceof ShortUrlExistsError) {
-				errors[FIELD_NAMES.SHORT_URL] = error.message;
-			} else if (error instanceof InvalidUrlError) {
-				errors[FIELD_NAMES.URL] = error.message;
-			} else if (error instanceof InvalidShortUrlError) {
-				errors[FIELD_NAMES.SHORT_URL] = error.message;
-			} else {
-				errors.general = 'An unexpected error occurred';
-			}
-			return fail(400, { errors, data: Object.fromEntries(formData) });
-		}
+			const { shortUrl, url } = validateCreateUrlFormData(formData);
 
-		return {
-			shortUrl: `${origin}/${shortUrl}/stats`
-		};
+			await createLink(shortUrl, url);
+
+			return {
+				shortUrl: `${origin}/${shortUrl}/stats`
+			};
+		} catch (error) {
+			const data = Object.fromEntries(formData);
+
+			if (error instanceof CreateUrlError) {
+				return fail<ActionData>(400, { errors: { [error.field]: error.message }, data });
+			}
+
+			return fail<ActionData>(500, { errors: { general: 'An unexpected error occurred' }, data });
+		}
 	}
 } satisfies Actions;

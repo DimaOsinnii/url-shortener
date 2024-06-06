@@ -1,11 +1,12 @@
 <script lang="ts">
 	import type { ActionData, SubmitFunction } from './$types';
 	import type { HTMLInputAttributes } from 'svelte/elements';
+	import type { FieldNames } from '$lib/types';
+
 	import { fade } from 'svelte/transition';
 
 	import { enhance } from '$app/forms';
-
-	import { FIELD_LABELS, FIELD_NAMES, FIELD_PLACEHOLDERS } from '../constants';
+	import { invalidateAll } from '$app/navigation';
 
 	export let form: ActionData;
 
@@ -16,26 +17,24 @@
 		return async ({ update }) => {
 			loading = false;
 			await update();
+			await invalidateAll();
 		};
 	};
 
-	$: urlError = form?.errors?.[FIELD_NAMES.URL];
-	$: shortUrlError = form?.errors?.[FIELD_NAMES.SHORT_URL];
-	$: generalError = form?.errors?.general;
-
-	let inputProps: Record<string, HTMLInputAttributes> = {
-		[FIELD_NAMES.URL]: {},
-		[FIELD_NAMES.SHORT_URL]: {}
+	let inputProps: Record<FieldNames, HTMLInputAttributes> = {
+		url: {},
+		shortUrl: {}
 	};
 
-	$: {
-		inputProps[FIELD_NAMES.URL]['aria-invalid'] = urlError ? true : undefined;
-		inputProps[FIELD_NAMES.URL]['aria-describedby'] = urlError ? 'invalid-url' : '';
+	$: urlError = form?.errors?.url;
+	$: shortUrlError = form?.errors?.shortUrl;
+	$: generalError = form?.errors?.general;
 
-		if (shortUrlError) {
-			inputProps[FIELD_NAMES.SHORT_URL]['aria-invalid'] = true;
-			inputProps[FIELD_NAMES.SHORT_URL]['aria-describedby'] = 'invalid-short-url';
-		}
+	$: {
+		inputProps.url['aria-invalid'] = urlError ? true : undefined;
+		inputProps.shortUrl['aria-invalid'] = shortUrlError ? true : undefined;
+		inputProps.url['aria-describedby'] = urlError ? 'invalid-url' : '';
+		inputProps.shortUrl['aria-describedby'] = shortUrlError ? 'invalid-short-url' : '';
 	}
 </script>
 
@@ -48,14 +47,14 @@
 	<form method="POST" use:enhance={handleSubmit}>
 		<fieldset>
 			<label>
-				{FIELD_LABELS[FIELD_NAMES.URL]}
+				URL
 				<input
 					required
-					name={FIELD_NAMES.URL}
-					value={form?.data?.[FIELD_NAMES.URL] ?? ''}
-					placeholder={FIELD_PLACEHOLDERS[FIELD_NAMES.URL]}
+					name="url"
+					value={form?.data?.url ?? ''}
+					placeholder="Enter long url"
 					aria-invalid="true"
-					{...inputProps[FIELD_NAMES.URL]}
+					{...inputProps.url}
 				/>
 				{#if !!urlError}
 					<small id="invalid-url">{urlError}</small>
@@ -66,13 +65,13 @@
 				<i />
 			</span>
 			<label>
-				{FIELD_LABELS[FIELD_NAMES.SHORT_URL]}
+				Short URL
 				<input
 					required
-					name={FIELD_NAMES.SHORT_URL}
-					value={form?.data?.[FIELD_NAMES.SHORT_URL] ?? ''}
-					placeholder={FIELD_PLACEHOLDERS[FIELD_NAMES.SHORT_URL]}
-					{...inputProps[FIELD_NAMES.SHORT_URL]}
+					name="shortUrl"
+					value={form?.data?.shortUrl ?? ''}
+					placeholder="Enter short url"
+					{...inputProps.shortUrl}
 				/>
 				{#if !!shortUrlError}
 					<small id="invalid-short-url">{shortUrlError}</small>

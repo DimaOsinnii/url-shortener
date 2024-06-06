@@ -1,6 +1,4 @@
-import { KV_NAMESPACE } from '../constants';
-import { isValidShortUrl, isValidUrl } from '$lib';
-import { ShortUrlExistsError, InvalidUrlError, InvalidShortUrlError } from '$lib/errors';
+import { CreateUrlError } from '$lib/errors';
 
 interface LinkMetadata {
 	url: string;
@@ -12,7 +10,7 @@ export function createLinkService(platform?: App.Platform) {
 		throw new Error('Platform is not specified!');
 	}
 
-	const store = platform.env[KV_NAMESPACE.LINKS];
+	const store = platform.env.LINKS;
 
 	async function getLink(url: string) {
 		const { metadata } = await store.getWithMetadata<LinkMetadata>(url);
@@ -21,18 +19,11 @@ export function createLinkService(platform?: App.Platform) {
 	}
 
 	async function createLink(shortUrl: string, longUrl: string) {
-		if (!isValidUrl(longUrl)) {
-			throw new InvalidUrlError();
-		}
-
-		if (!isValidShortUrl(shortUrl)) {
-			throw new InvalidShortUrlError();
-		}
 		//this is bad solution and might cause link overriding
 		const url = await getLink(shortUrl);
 
 		if (url) {
-			throw new ShortUrlExistsError();
+			throw new CreateUrlError('shortUrl', 'Short URL already exists');
 		}
 
 		await store.put(shortUrl, '', {
