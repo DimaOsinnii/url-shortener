@@ -1,9 +1,0 @@
-name = "url-shortener"
-account_id = "$ACCOUNT_ID"
-workers_dev = true
-compatibility_date = "2023-05-25"
-
-kv_namespaces = [
-    { binding = "LINKS", id = "$LINKS_KV_NAMESPACE_ID" },
-    { binding = "HISTORY", id = "$HISTORY_KV_NAMESPACE_ID" },
-]

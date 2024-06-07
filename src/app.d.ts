@@ -1,3 +1,5 @@
+import type { KVNames } from '$lib/types';
+
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 declare global {
@@ -7,9 +9,7 @@ declare global {
 		// interface PageData {}
 		// interface PageState {}
 		interface Platform {
-			env: {
-				ASS: KVNamespace,
-			}
+			env: Record<KVNames, KVNamespace>;
 		}
 	}
 }
